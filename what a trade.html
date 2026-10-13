@@ -1,0 +1,3019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
+<meta name="theme-color" content="#090b18">
+
+<title>DEEPU • Wingo Pattern Analyzer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#070914;
+    --card:#101426;
+    --card2:#151a31;
+    --text:#ffffff;
+    --muted:#9299b8;
+    --red:#ff3b5f;
+    --red2:#ff1744;
+    --green:#00e676;
+    --green2:#00b85c;
+    --blue:#4d7cff;
+    --purple:#9b5cff;
+    --orange:#ff9d3d;
+    --cyan:#00d9ff;
+    --border:rgba(255,255,255,.08);
+}
+
+body{
+    font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+    background:
+    radial-gradient(
+        circle at 10% 0%,
+        rgba(77,124,255,.18),
+        transparent 30%
+    ),
+    radial-gradient(
+        circle at 90% 10%,
+        rgba(155,92,255,.16),
+        transparent 30%
+    ),
+    var(--bg);
+
+    color:var(--text);
+    min-height:100vh;
+}
+
+button{
+    font-family:inherit;
+}
+
+.app{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding-bottom:30px;
+}
+
+
+/* ================= HEADER ================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+
+    padding:
+    18px 16px
+    15px;
+
+    background:
+    rgba(7,9,20,.88);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+    1px solid var(--border);
+}
+
+.header-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    font-size:21px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--blue),
+        var(--purple)
+    );
+
+    box-shadow:
+    0 8px 30px
+    rgba(77,124,255,.3);
+}
+
+.logo-title{
+    font-size:17px;
+    font-weight:900;
+}
+
+.logo-sub{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
+
+.live{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 10px;
+
+    border-radius:30px;
+
+    font-size:11px;
+    font-weight:800;
+
+    background:
+    rgba(0,230,118,.09);
+
+    color:var(--green);
+
+    border:
+    1px solid
+    rgba(0,230,118,.2);
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--green);
+
+    box-shadow:
+    0 0 10px
+    var(--green);
+
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        opacity:.3;
+        transform:scale(.7);
+    }
+}
+
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:16px;
+}
+
+
+/* ================= PERIOD ================= */
+
+.period-card{
+    position:relative;
+    overflow:hidden;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(77,124,255,.16),
+        rgba(155,92,255,.09)
+    );
+
+    border:
+    1px solid
+    rgba(255,255,255,.09);
+
+    box-shadow:
+    0 15px 45px
+    rgba(0,0,0,.2);
+
+    margin-bottom:15px;
+}
+
+.period-card:before{
+    content:"";
+
+    position:absolute;
+
+    width:160px;
+    height:160px;
+
+    right:-70px;
+    top:-80px;
+
+    border-radius:50%;
+
+    background:
+    rgba(0,217,255,.12);
+
+    filter:blur(5px);
+}
+
+.period-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.small-label{
+    font-size:11px;
+    color:var(--muted);
+    font-weight:700;
+}
+
+.period-number{
+    margin-top:7px;
+
+    font-size:20px;
+    font-weight:900;
+
+    letter-spacing:1px;
+}
+
+.timer{
+    width:65px;
+    height:65px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    font-size:18px;
+    font-weight:900;
+
+    background:
+    conic-gradient(
+        var(--cyan) 0deg,
+        rgba(255,255,255,.08) 0deg
+    );
+
+    position:relative;
+}
+
+.timer:after{
+    content:"";
+
+    position:absolute;
+
+    width:53px;
+    height:53px;
+
+    border-radius:50%;
+
+    background:var(--bg);
+}
+
+.timer span{
+    position:relative;
+    z-index:2;
+}
+
+
+/* ================= GRID ================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+    gap:14px;
+}
+
+.card{
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.045),
+        rgba(255,255,255,.018)
+    );
+
+    border:
+    1px solid
+    var(--border);
+
+    border-radius:20px;
+
+    padding:17px;
+
+    box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.15);
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:8px;
+
+    font-size:13px;
+    font-weight:900;
+
+    margin-bottom:14px;
+}
+
+.card-title-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.title-icon{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:
+    rgba(77,124,255,.12);
+}
+
+
+/* ================= TREND ================= */
+
+.trend-card{
+    padding:20px;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.trend-card:after{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    right:-100px;
+    bottom:-100px;
+
+    border-radius:50%;
+
+    background:
+    rgba(155,92,255,.12);
+
+    filter:blur(10px);
+}
+
+.trend-main{
+    font-size:40px;
+    line-height:1;
+
+    font-weight:1000;
+
+    letter-spacing:1px;
+
+    margin:6px 0 8px;
+
+    position:relative;
+    z-index:2;
+}
+
+.trend-main.big{
+    color:var(--green);
+
+    text-shadow:
+    0 0 25px
+    rgba(0,230,118,.35);
+}
+
+.trend-main.small{
+    color:var(--red);
+
+    text-shadow:
+    0 0 25px
+    rgba(255,59,95,.35);
+}
+
+.trend-main.wait{
+    color:var(--muted);
+}
+
+.trend-sub{
+    color:var(--muted);
+    font-size:12px;
+
+    position:relative;
+    z-index:2;
+}
+
+.strength{
+    margin-top:14px;
+
+    height:7px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:
+    rgba(255,255,255,.06);
+}
+
+.strength-bar{
+    height:100%;
+    width:0%;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--cyan),
+        var(--purple)
+    );
+
+    transition:
+    width .5s ease;
+}
+
+
+/* ================= PATTERN ================= */
+
+.pattern-name{
+    font-size:21px;
+    font-weight:1000;
+
+    margin-bottom:6px;
+}
+
+.pattern-description{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.pattern-trend{
+    display:inline-flex;
+
+    margin-top:13px;
+
+    padding:7px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+    font-weight:1000;
+
+    background:
+    rgba(255,255,255,.06);
+}
+
+.pattern-trend.big{
+    color:var(--green);
+    border:
+    1px solid
+    rgba(0,230,118,.22);
+}
+
+.pattern-trend.small{
+    color:var(--red);
+    border:
+    1px solid
+    rgba(255,59,95,.22);
+}
+
+.pattern-trend.mixed{
+    color:var(--orange);
+}
+
+
+/* ================= SEQUENCE ================= */
+
+.sequence{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.seq-item{
+    min-width:32px;
+    height:32px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    font-size:12px;
+    font-weight:1000;
+}
+
+.seq-item.big{
+    background:
+    rgba(0,230,118,.12);
+
+    color:var(--green);
+
+    border:
+    1px solid
+    rgba(0,230,118,.18);
+}
+
+.seq-item.small{
+    background:
+    rgba(255,59,95,.12);
+
+    color:var(--red);
+
+    border:
+    1px solid
+    rgba(255,59,95,.18);
+}
+
+
+/* ================= CATEGORY ================= */
+
+.category-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:9px;
+}
+
+.category-box{
+    padding:13px;
+
+    border-radius:14px;
+
+    background:
+    rgba(255,255,255,.035);
+
+    border:
+    1px solid
+    var(--border);
+}
+
+.category-title{
+    color:var(--muted);
+    font-size:10px;
+    font-weight:700;
+}
+
+.category-value{
+    margin-top:5px;
+
+    font-size:18px;
+    font-weight:1000;
+}
+
+
+/* ================= STATS ================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:8px;
+}
+
+.stat{
+    text-align:center;
+
+    padding:13px 6px;
+
+    border-radius:13px;
+
+    background:
+    rgba(255,255,255,.035);
+}
+
+.stat-number{
+    font-size:18px;
+    font-weight:1000;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+}
+
+
+/* ================= RESULTS ================= */
+
+.results{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.result-row{
+    display:grid;
+
+    grid-template-columns:
+    1.3fr .8fr .8fr .8fr;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:11px;
+
+    border-radius:13px;
+
+    background:
+    rgba(255,255,255,.035);
+
+    border:
+    1px solid
+    rgba(255,255,255,.04);
+}
+
+.result-period{
+    font-size:11px;
+
+    color:var(--muted);
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.result-number{
+    font-size:17px;
+    font-weight:1000;
+
+    text-align:center;
+}
+
+.badge{
+    padding:5px 7px;
+
+    text-align:center;
+
+    border-radius:8px;
+
+    font-size:9px;
+    font-weight:1000;
+}
+
+.badge.big{
+    color:var(--green);
+    background:
+    rgba(0,230,118,.1);
+}
+
+.badge.small{
+    color:var(--red);
+    background:
+    rgba(255,59,95,.1);
+}
+
+.badge.green{
+    color:var(--green);
+    background:
+    rgba(0,230,118,.08);
+}
+
+.badge.red{
+    color:var(--red);
+    background:
+    rgba(255,59,95,.08);
+}
+
+
+/* ================= PATTERN LIBRARY ================= */
+
+.library{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:9px;
+}
+
+.pattern-chip{
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+    rgba(255,255,255,.035);
+
+    border:
+    1px solid
+    var(--border);
+}
+
+.pattern-chip-name{
+    font-size:11px;
+    font-weight:900;
+}
+
+.pattern-chip-code{
+    margin-top:4px;
+
+    font-family:
+    monospace;
+
+    font-size:10px;
+
+    color:var(--cyan);
+}
+
+
+/* ================= NOTICE ================= */
+
+.notice{
+    margin-top:15px;
+
+    padding:14px;
+
+    border-radius:15px;
+
+    font-size:10px;
+
+    line-height:1.5;
+
+    color:var(--muted);
+
+    background:
+    rgba(255,157,61,.06);
+
+    border:
+    1px solid
+    rgba(255,157,61,.15);
+}
+
+
+/* ================= LOADING ================= */
+
+.loading{
+    text-align:center;
+
+    padding:20px;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+.error{
+    color:var(--red);
+
+    text-align:center;
+
+    padding:15px;
+
+    font-size:12px;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+    .content{
+        padding:12px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .stats{
+        grid-template-columns:
+        repeat(4,1fr);
+    }
+
+    .stat-number{
+        font-size:16px;
+    }
+
+    .period-number{
+        font-size:16px;
+    }
+
+    .timer{
+        width:58px;
+        height:58px;
+    }
+
+    .timer:after{
+        width:48px;
+        height:48px;
+    }
+
+    .result-row{
+        grid-template-columns:
+        1.2fr .6fr .7fr .7fr;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="header-row">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🔥
+            </div>
+
+            <div>
+
+                <div class="logo-title">
+                    DEEPU Pattern Analyzer
+                </div>
+
+                <div class="logo-sub">
+                    Wingo Big / Small Analysis
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="live">
+
+            <span class="live-dot"></span>
+
+            LIVE
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main class="content">
+
+
+<!-- ================= PERIOD ================= -->
+
+<section class="period-card">
+
+    <div class="period-top">
+
+        <div>
+
+            <div class="small-label">
+                CURRENT COMPLETED PERIOD
+            </div>
+
+            <div
+                class="period-number"
+                id="currentPeriod">
+                Loading...
+            </div>
+
+        </div>
+
+
+        <div class="timer" id="timer">
+
+            <span id="timerText">
+                60
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<div class="grid">
+
+
+<!-- ================= TREND ================= -->
+
+<section class="card full trend-card">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                📊
+            </div>
+
+            <span>
+                CURRENT OBSERVED TREND
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="observedTrend"
+        class="trend-main wait">
+
+        WAIT
+
+    </div>
+
+
+    <div
+        id="trendSub"
+        class="trend-sub">
+
+        Analyzing latest results...
+
+    </div>
+
+
+    <div class="strength">
+
+        <div
+            id="strengthBar"
+            class="strength-bar">
+        </div>
+
+    </div>
+
+
+    <div
+        id="trendStrength"
+        class="trend-sub"
+        style="margin-top:8px">
+
+        Pattern strength: --
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PATTERN ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                🧠
+            </div>
+
+            <span>
+                DETECTED PATTERN
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="patternName"
+        class="pattern-name">
+
+        WAITING
+
+    </div>
+
+
+    <div
+        id="patternDescription"
+        class="pattern-description">
+
+        Waiting for enough results...
+
+    </div>
+
+
+    <div
+        id="patternTrend"
+        class="pattern-trend mixed">
+
+        WAIT
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= SEQUENCE ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                🔄
+            </div>
+
+            <span>
+                B / S SEQUENCE
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="patternSequence"
+        class="sequence">
+
+        <div class="loading">
+            Loading...
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CATEGORY ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                🎯
+            </div>
+
+            <span>
+                NUMBER CATEGORY REFERENCE
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="categoryGrid"
+        class="category-grid">
+
+        <div class="category-box">
+
+            <div class="category-title">
+                GREEN + BIG
+            </div>
+
+            <div class="category-value">
+                7, 9
+            </div>
+
+        </div>
+
+
+        <div class="category-box">
+
+            <div class="category-title">
+                GREEN + SMALL
+            </div>
+
+            <div class="category-value">
+                1, 3
+            </div>
+
+        </div>
+
+
+        <div class="category-box">
+
+            <div class="category-title">
+                RED + BIG
+            </div>
+
+            <div class="category-value">
+                6, 8
+            </div>
+
+        </div>
+
+
+        <div class="category-box">
+
+            <div class="category-title">
+                RED + SMALL
+            </div>
+
+            <div class="category-value">
+                2, 4
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= STATS ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                📈
+            </div>
+
+            <span>
+                LAST 10 RESULTS
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div
+                id="bigCount"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-label">
+                BIG
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="smallCount"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-label">
+                SMALL
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="greenCount"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-label">
+                GREEN
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="redCount"
+                class="stat-number">
+                0
+            </div>
+
+            <div class="stat-label">
+                RED
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PATTERN LIBRARY ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                📚
+            </div>
+
+            <span>
+                PATTERN LIBRARY
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="library">
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                SINGLE
+            </div>
+
+            <div class="pattern-chip-code">
+                BSBSB / SBSBS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                DOUBLE
+            </div>
+
+            <div class="pattern-chip-code">
+                BBSS / SSBB
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                TRIPLE
+            </div>
+
+            <div class="pattern-chip-code">
+                BBB / SSS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                THREE IN ONE
+            </div>
+
+            <div class="pattern-chip-code">
+                BBBSBBB / SSSBSSS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                TWO IN ONE
+            </div>
+
+            <div class="pattern-chip-code">
+                BBSBBS / SSBS SB
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                THREE IN TWO
+            </div>
+
+            <div class="pattern-chip-code">
+                BBBSSBBB / SSSBBSSS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                FOUR IN TWO
+            </div>
+
+            <div class="pattern-chip-code">
+                BBBBSSBB / SSSSBBSS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                FOUR IN ONE
+            </div>
+
+            <div class="pattern-chip-code">
+                BBBBSBBBB / SSSSBSSSS
+            </div>
+
+        </div>
+
+
+        <div class="pattern-chip">
+
+            <div class="pattern-chip-name">
+                LONG TREND
+            </div>
+
+            <div class="pattern-chip-code">
+                BBBBBB+ / SSSSSS+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= RESULTS ================= -->
+
+<section class="card full">
+
+    <div class="card-title">
+
+        <div class="card-title-left">
+
+            <div class="title-icon">
+                🕐
+            </div>
+
+            <span>
+                LATEST 10 RESULTS
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="results"
+        class="results">
+
+        <div class="loading">
+            Loading results...
+        </div>
+
+    </div>
+
+</section>
+
+
+</div>
+
+
+
+<!-- ================= NOTICE ================= -->
+
+<div class="notice">
+
+    ⚠️ <b>Analysis Notice:</b>
+    This page identifies patterns and current observed
+    Big/Small trends from the fetched historical results.
+    Pattern detection is statistical/visual analysis only
+    and does not guarantee any future outcome.
+
+</div>
+
+
+</main>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   DEEPU WINGO PATTERN ANALYZER
+   ========================================================= */
+
+"use strict";
+
+
+/* ================= CONFIG ================= */
+
+const API_URL =
+"https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json";
+
+
+const HISTORY_KEY =
+"deepu_wingo_history_v1";
+
+
+let historyData = [];
+
+let secondsLeft = 60;
+
+
+/* ================= HELPERS ================= */
+
+function $(id){
+    return document.getElementById(id);
+}
+
+
+function getSize(number){
+
+    number = Number(number);
+
+    return number >= 5
+        ? "BIG"
+        : "SMALL";
+}
+
+
+function getColor(number){
+
+    number = Number(number);
+
+    if(number === 0)
+        return "RED + VIOLET";
+
+    if(number === 5)
+        return "GREEN + VIOLET";
+
+    if(
+        [1,3,7,9]
+        .includes(number)
+    )
+        return "GREEN";
+
+    if(
+        [2,4,6,8]
+        .includes(number)
+    )
+        return "RED";
+
+    return "-";
+}
+
+
+/* ================= NORMALIZE API ================= */
+
+function normalizeItem(item){
+
+    if(!item)
+        return null;
+
+
+    const number =
+        Number(
+            item.number ??
+            item.result ??
+            item.openNum ??
+            item.winNumber ??
+            item.lotteryResult
+        );
+
+
+    const period =
+        String(
+            item.issueNumber ??
+            item.issue ??
+            item.period ??
+            item.issueNo ??
+            item.periodNumber ??
+            "-"
+        );
+
+
+    if(
+        !Number.isFinite(number) ||
+        number < 0 ||
+        number > 9
+    ){
+        return null;
+    }
+
+
+    return {
+
+        period:period,
+
+        number:number,
+
+        size:getSize(number),
+
+        color:getColor(number)
+
+    };
+
+}
+
+
+/* ================= API FETCH ================= */
+
+async function fetchHistory(){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "?page=1&count=30&_=" +
+                Date.now(),
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!response.ok)
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+
+        const json =
+            await response.json();
+
+
+        let raw = [];
+
+
+        if(Array.isArray(json))
+            raw = json;
+
+        else if(
+            json &&
+            Array.isArray(json.data)
+        )
+            raw = json.data;
+
+        else if(
+            json &&
+            json.data &&
+            Array.isArray(json.data.list)
+        )
+            raw = json.data.list;
+
+        else if(
+            json &&
+            Array.isArray(json.result)
+        )
+            raw = json.result;
+
+        else if(
+            json &&
+            json.data &&
+            Array.isArray(json.data.records)
+        )
+            raw = json.data.records;
+
+
+        const normalized =
+            raw
+            .map(normalizeItem)
+            .filter(Boolean);
+
+
+        if(!normalized.length){
+
+            throw new Error(
+                "No result data found"
+            );
+
+        }
+
+
+        /*
+         Remove duplicate periods
+        */
+
+        const unique =
+            new Map();
+
+
+        normalized.forEach(item => {
+
+            if(
+                !unique.has(item.period)
+            ){
+
+                unique.set(
+                    item.period,
+                    item
+                );
+
+            }
+
+        });
+
+
+        historyData =
+            Array.from(
+                unique.values()
+            );
+
+
+        saveHistory();
+
+
+        renderAll();
+
+
+        $("currentPeriod")
+            .textContent =
+            historyData[0]?.period ||
+            "Loading...";
+
+
+    }
+    catch(error){
+
+        console.error(
+            "History Error:",
+            error
+        );
+
+
+        /*
+        Use saved data if API fails
+        */
+
+        loadHistory();
+
+
+        if(historyData.length){
+
+            renderAll();
+
+        }
+        else{
+
+            $("results")
+                .innerHTML =
+                `<div class="error">
+                    Unable to load live results.
+                    Check internet connection.
+                 </div>`;
+
+        }
+
+    }
+
+}
+
+
+/* ================= LOCAL STORAGE ================= */
+
+function saveHistory(){
+
+    try{
+
+        localStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify(
+                historyData
+            )
+        );
+
+    }
+    catch(e){
+
+        console.log(e);
+
+    }
+
+}
+
+
+function loadHistory(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                HISTORY_KEY
+            );
+
+
+        if(saved){
+
+            historyData =
+                JSON.parse(saved);
+
+        }
+
+    }
+    catch(e){
+
+        historyData = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   B / S SEQUENCE
+   ========================================================= */
+
+function getSequence(data){
+
+    return data.map(
+        item =>
+        item.size === "BIG"
+            ? "B"
+            : "S"
+    );
+
+}
+
+
+/* =========================================================
+   RUN DETECTION
+   ========================================================= */
+
+function getRuns(sequence){
+
+    const runs = [];
+
+
+    if(!sequence.length)
+        return runs;
+
+
+    let current =
+        sequence[0];
+
+    let count = 1;
+
+
+    for(
+        let i = 1;
+        i < sequence.length;
+        i++
+    ){
+
+        if(
+            sequence[i] === current
+        ){
+
+            count++;
+
+        }
+        else{
+
+            runs.push({
+
+                value:current,
+
+                count:count
+
+            });
+
+
+            current =
+                sequence[i];
+
+            count = 1;
+
+        }
+
+    }
+
+
+    runs.push({
+
+        value:current,
+
+        count:count
+
+    });
+
+
+    return runs;
+
+}
+
+
+/* =========================================================
+   OPPOSITE B/S
+   ========================================================= */
+
+function oppositeBS(value){
+
+    return value === "B"
+        ? "S"
+        : "B";
+
+}
+
+
+/* =========================================================
+   MATCH EXACT OR REVERSE PATTERN
+   ========================================================= */
+
+function matchPattern(
+    seq,
+    pattern
+){
+
+    if(
+        seq.length <
+        pattern.length
+    ){
+
+        return null;
+
+    }
+
+
+    const current =
+        seq.slice(
+            0,
+            pattern.length
+        );
+
+
+    /*
+    Exact
+    */
+
+    let exact = true;
+
+
+    for(
+        let i = 0;
+        i < pattern.length;
+        i++
+    ){
+
+        if(
+            current[i] !==
+            pattern[i]
+        ){
+
+            exact = false;
+            break;
+
+        }
+
+    }
+
+
+    if(exact){
+
+        return pattern[0];
+
+    }
+
+
+    /*
+    Reverse B <-> S
+    */
+
+    let reverse = true;
+
+
+    for(
+        let i = 0;
+        i < pattern.length;
+        i++
+    ){
+
+        if(
+            current[i] !==
+            oppositeBS(pattern[i])
+        ){
+
+            reverse = false;
+            break;
+
+        }
+
+    }
+
+
+    if(reverse){
+
+        return oppositeBS(
+            pattern[0]
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   DETECT PATTERN
+   ========================================================= */
+
+function detectPattern(data){
+
+    const seq =
+        getSequence(data);
+
+
+    if(seq.length < 2){
+
+        return {
+
+            name:"WAITING",
+
+            trend:"WAIT",
+
+            description:
+                "Need more results.",
+
+            score:0
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       FOUR IN ONE
+       BBBB S BBBB
+       SSSS B SSSS
+       ----------------------------------------- */
+
+    let trend =
+        matchPattern(
+            seq,
+            [
+                "B","B","B","B",
+                "S",
+                "B","B","B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"FOUR IN ONE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BBBB S BBBB pattern detected."
+                    : "SSSS B SSSS pattern detected.",
+
+            score:90
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       FOUR IN TWO
+       BBBB SS BB
+       SSSS BB SS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B","B","B",
+                "S","S",
+                "B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"FOUR IN TWO",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BBBB SS BB pattern detected."
+                    : "SSSS BB SS pattern detected.",
+
+            score:88
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       THREE IN TWO
+       BBB SS BBB
+       SSS BB SSS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B","B",
+                "S","S",
+                "B","B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"THREE IN TWO",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BBB SS BBB pattern detected."
+                    : "SSS BB SSS pattern detected.",
+
+            score:86
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       THREE IN ONE
+       BBB S BBB
+       SSS B SSS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B","B",
+                "S",
+                "B","B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"THREE IN ONE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BBB S BBB pattern detected."
+                    : "SSS B SSS pattern detected.",
+
+            score:84
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       TWO IN ONE
+       BB S BB S
+       SS B SS B
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B",
+                "S",
+                "B","B",
+                "S"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"TWO IN ONE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BB S BB S pattern detected."
+                    : "SS B SS B pattern detected.",
+
+            score:82
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       SINGLE / ALTERNATING
+       BSBSB
+       SBSBS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","S","B","S","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"SINGLE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "B S B S B pattern detected."
+                    : "S B S B S pattern detected.",
+
+            score:65
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       TRIPLE
+       BBB
+       SSS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"TRIPLE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BBB pattern detected."
+                    : "SSS pattern detected.",
+
+            score:78
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       DOUBLE
+       BB
+       SS
+       ----------------------------------------- */
+
+    trend =
+        matchPattern(
+            seq,
+            [
+                "B","B"
+            ]
+        );
+
+
+    if(trend){
+
+        return {
+
+            name:"DOUBLE",
+
+            trend:
+                trend === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                trend === "B"
+                    ? "BB pattern detected."
+                    : "SS pattern detected.",
+
+            score:70
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       LONG TREND
+       6 OR MORE SAME
+       ----------------------------------------- */
+
+    const runs =
+        getRuns(seq);
+
+
+    const latest =
+        runs[runs.length - 1];
+
+
+    if(
+        latest &&
+        latest.count >= 6
+    ){
+
+        return {
+
+            name:"LONG TREND",
+
+            trend:
+                latest.value === "B"
+                    ? "BIG"
+                    : "SMALL",
+
+            description:
+                latest.value === "B"
+                    ? "Long BIG trend detected."
+                    : "Long SMALL trend detected.",
+
+            score:95
+
+        };
+
+    }
+
+
+    return {
+
+        name:"MIXED",
+
+        trend:"MIXED",
+
+        description:
+            "No defined pattern detected.",
+
+        score:0
+
+    };
+
+}
+
+
+/* =========================================================
+   OBSERVED TREND
+   ========================================================= */
+
+function getObservedTrend(data){
+
+    const seq =
+        getSequence(data);
+
+
+    if(!seq.length){
+
+        return "WAIT";
+
+    }
+
+
+    const runs =
+        getRuns(seq);
+
+
+    const latest =
+        runs[runs.length - 1];
+
+
+    if(
+        latest &&
+        latest.count >= 6
+    ){
+
+        return latest.value === "B"
+            ? "BIG"
+            : "SMALL";
+
+    }
+
+
+    const result =
+        detectPattern(data);
+
+
+    if(
+        result &&
+        (
+            result.trend === "BIG" ||
+            result.trend === "SMALL"
+        )
+    ){
+
+        return result.trend;
+
+    }
+
+
+    let big = 0;
+    let small = 0;
+
+
+    seq.forEach(v => {
+
+        if(v === "B")
+            big++;
+        else
+            small++;
+
+    });
+
+
+    if(big > small)
+        return "BIG";
+
+    if(small > big)
+        return "SMALL";
+
+
+    return "MIXED";
+
+}
+
+
+/* =========================================================
+   RENDER PATTERN
+   ========================================================= */
+
+function renderPattern(data){
+
+    const result =
+        detectPattern(data);
+
+
+    const observed =
+        getObservedTrend(data);
+
+
+    /*
+    Main trend
+    */
+
+    const trendEl =
+        $("observedTrend");
+
+
+    trendEl.textContent =
+        observed;
+
+
+    trendEl.className =
+        "trend-main";
+
+
+    if(observed === "BIG"){
+
+        trendEl.classList.add("big");
+
+    }
+    else if(observed === "SMALL"){
+
+        trendEl.classList.add("small");
+
+    }
+    else{
+
+        trendEl.classList.add("wait");
+
+    }
+
+
+    /*
+    Sub text
+    */
+
+    $("trendSub")
+        .textContent =
+        "Current observed chart structure";
+
+
+    /*
+    Pattern name
+    */
+
+    $("patternName")
+        .textContent =
+        result.name;
+
+
+    /*
+    Description
+    */
+
+    $("patternDescription")
+        .textContent =
+        result.description;
+
+
+    /*
+    Pattern BIG / SMALL badge
+    */
+
+    const badge =
+        $("patternTrend");
+
+
+    badge.textContent =
+        result.trend;
+
+
+    badge.className =
+        "pattern-trend";
+
+
+    if(result.trend === "BIG"){
+
+        badge.classList.add("big");
+
+    }
+    else if(result.trend === "SMALL"){
+
+        badge.classList.add("small");
+
+    }
+    else{
+
+        badge.classList.add("mixed");
+
+    }
+
+
+    /*
+    Strength
+    */
+
+    $("trendStrength")
+        .textContent =
+        result.score
+            ? "Pattern strength: " +
+              result.score +
+              "/100"
+            : "Pattern strength: --";
+
+
+    $("strengthBar")
+        .style.width =
+        Math.min(
+            result.score || 0,
+            100
+        ) + "%";
+
+
+    /*
+    Sequence
+    */
+
+    renderSequence(data);
+
+}
+
+
+/* =========================================================
+   RENDER SEQUENCE
+   ========================================================= */
+
+function renderSequence(data){
+
+    const container =
+        $("patternSequence");
+
+
+    const seq =
+        getSequence(data);
+
+
+    if(!seq.length){
+
+        container.innerHTML =
+            `<div class="loading">
+                No sequence available
+             </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        seq.map(
+            value => {
+
+                return `
+                <div class="seq-item ${
+                    value === "B"
+                        ? "big"
+                        : "small"
+                }">
+
+                    ${value}
+
+                </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   RENDER CATEGORY
+   ========================================================= */
+
+function renderCategoryReferences(data){
+
+    const latest =
+        data[0];
+
+
+    if(!latest)
+        return;
+
+
+    const size =
+        latest.size;
+
+
+    const color =
+        latest.color;
+
+
+    let active =
+        "";
+
+
+    if(
+        color.includes("GREEN") &&
+        size === "BIG"
+    ){
+
+        active =
+            "GREEN + BIG";
+
+    }
+    else if(
+        color.includes("GREEN") &&
+        size === "SMALL"
+    ){
+
+        active =
+            "GREEN + SMALL";
+
+    }
+    else if(
+        color.includes("RED") &&
+        size === "BIG"
+    ){
+
+        active =
+            "RED + BIG";
+
+    }
+    else if(
+        color.includes("RED") &&
+        size === "SMALL"
+    ){
+
+        active =
+            "RED + SMALL";
+
+    }
+
+
+    const boxes = {
+
+        "GREEN + BIG":[7,9],
+
+        "GREEN + SMALL":[1,3],
+
+        "RED + BIG":[6,8],
+
+        "RED + SMALL":[2,4]
+
+    };
+
+
+    const html =
+        Object.entries(boxes)
+        .map(
+            ([title,numbers]) => {
+
+                const isActive =
+                    title === active;
+
+
+                return `
+                <div
+                    class="category-box"
+                    style="${
+                        isActive
+                        ? "border-color:rgba(0,217,255,.5);background:rgba(0,217,255,.07);"
+                        : ""
+                    }">
+
+                    <div class="category-title">
+                        ${title}
+                    </div>
+
+                    <div class="category-value">
+                        ${numbers.join(", ")}
+                    </div>
+
+                </div>
+                `;
+
+            }
+        )
+        .join("");
+
+
+    $("categoryGrid")
+        .innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   RENDER STATS
+   ========================================================= */
+
+function renderStats(data){
+
+    const latest =
+        data.slice(0,10);
+
+
+    let big = 0;
+    let small = 0;
+
+    let green = 0;
+    let red = 0;
+
+
+    latest.forEach(item => {
+
+        if(item.size === "BIG")
+            big++;
+        else
+            small++;
+
+
+        if(
+            item.color.includes("GREEN")
+        )
+            green++;
+
+
+        if(
+            item.color.includes("RED")
+        )
+            red++;
+
+    });
+
+
+    $("bigCount")
+        .textContent = big;
+
+
+    $("smallCount")
+        .textContent = small;
+
+
+    $("greenCount")
+        .textContent = green;
+
+
+    $("redCount")
+        .textContent = red;
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+   ========================================================= */
+
+function renderResults(data){
+
+    const latest =
+        data.slice(0,10);
+
+
+    if(!latest.length){
+
+        $("results").innerHTML =
+            `<div class="loading">
+                No results
+             </div>`;
+
+        return;
+
+    }
+
+
+    $("results").innerHTML =
+        latest.map(
+            item => {
+
+                const sizeClass =
+                    item.size === "BIG"
+                        ? "big"
+                        : "small";
+
+
+                const colorClass =
+                    item.color.includes("GREEN")
+                        ? "green"
+                        : item.color.includes("RED")
+                            ? "red"
+                            : "";
+
+
+                return `
+
+                <div class="result-row">
+
+                    <div
+                        class="result-period"
+                        title="${item.period}">
+
+                        ${item.period}
+
+                    </div>
+
+
+                    <div
+                        class="result-number">
+
+                        ${item.number}
+
+                    </div>
+
+
+                    <div
+                        class="badge ${sizeClass}">
+
+                        ${item.size}
+
+                    </div>
+
+
+                    <div
+                        class="badge ${colorClass}">
+
+                        ${item.color}
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+
+function renderAll(){
+
+    if(!historyData.length)
+        return;
+
+
+    $("currentPeriod")
+        .textContent =
+        historyData[0]?.period ||
+        "Loading...";
+
+
+    renderPattern(
+        historyData
+    );
+
+
+    renderCategoryReferences(
+        historyData
+    );
+
+
+    renderStats(
+        historyData
+    );
+
+
+    renderResults(
+        historyData
+    );
+
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function updateTimer(){
+
+    secondsLeft--;
+
+
+    if(secondsLeft < 0){
+
+        secondsLeft = 59;
+
+        fetchHistory();
+
+    }
+
+
+    $("timerText")
+        .textContent =
+        String(secondsLeft)
+        .padStart(2,"0");
+
+
+    const percent =
+        ((60 - secondsLeft) / 60) * 360;
+
+
+    $("timer")
+        .style.background =
+        `conic-gradient(
+            var(--cyan) ${percent}deg,
+            rgba(255,255,255,.08) ${percent}deg
+        )`;
+
+}
+
+
+setInterval(
+    updateTimer,
+    1000
+);
+
+
+/* =========================================================
+   AUTO REFRESH
+   ========================================================= */
+
+setInterval(
+    fetchHistory,
+    6000
+);
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+loadHistory();
+
+renderAll();
+
+fetchHistory();
+
+
+</script>
+
+</body>
+</html>
